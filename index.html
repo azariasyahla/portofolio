@@ -311,6 +311,33 @@ body.twilight .postbox-invitation .postbox-open{background:linear-gradient(120de
 @media(prefers-reduced-motion:reduce){.invitation-envelope{animation:none!important}.postbox-open,.invitation-note{transition:none!important}}
 
 </style>
+<style id="footer-corner-layout">
+.doodle.loop{display:none!important}
+footer{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;column-gap:26px;row-gap:3px;padding:22px 3.5%;font-size:11px;line-height:1.65}
+footer>.footer-credit{grid-column:1;grid-row:1;min-width:0}
+footer>.footer-made{grid-column:1;grid-row:2;min-width:0;font-size:10px;opacity:.82}
+footer>.garden-visits{grid-column:2;grid-row:1 / span 2;align-self:end;width:auto;max-width:none;border:0;padding:0;margin:0;text-align:right;font-size:10px;line-height:1.6;white-space:nowrap}
+footer #visits-before{display:none}footer .visit-flower{font-size:12px;margin-right:1px}footer .garden-counter-badge{height:14px;margin:0 2px;border-radius:3px}footer .garden-visits a{font-size:8px;opacity:.7}footer .visit-info{font-size:9px}
+@media(max-width:480px){footer{padding:18px 18px;column-gap:12px;font-size:10px}footer>.footer-credit{max-width:230px}footer>.footer-made{font-size:9px}footer>.garden-visits{font-size:9px}footer .garden-counter-badge{height:13px}}
+/* Centered visitor sparkle + fairy-light invitation */
+footer{grid-template-columns:1fr;justify-items:center;row-gap:4px}
+footer>.garden-visits{grid-column:1;grid-row:1;justify-self:center;order:0;text-align:center;width:min(100%,560px);padding:7px 18px 5px;margin:0 0 7px;border:0;border-radius:0;background:transparent;box-shadow:none;position:relative;overflow:visible;font-size:11px;white-space:normal}
+footer>.footer-credit{grid-column:1;grid-row:2;justify-self:start;width:100%}
+footer>.footer-made{grid-column:1;grid-row:3;justify-self:start;width:100%}
+.garden-visits .visit-sparkle{display:inline-block;color:#d88abb;font-size:16px;vertical-align:middle;animation:visit-twinkle 1.8s ease-in-out infinite}
+.garden-visits .sparkle-right{animation-delay:.75s}.garden-visits .visit-flower{font-size:15px;animation:visit-sway 2.2s ease-in-out infinite}
+.garden-visits .visit-info{margin-left:3px}.garden-visits a{display:inline-block;margin-top:1px}
+@keyframes visit-twinkle{0%,100%{opacity:.35;transform:scale(.7) rotate(0)}50%{opacity:1;transform:scale(1.25) rotate(18deg)}}
+@keyframes visit-sway{50%{transform:rotate(8deg) translateY(-2px)}}
+.postbox-invitation .postbox-open{cursor:pointer;box-shadow:0 0 0 1px #f4d5f0,0 0 16px #e9a9dc99,0 0 34px #c8a2ed66,4px 5px 0 #e6c6e455;animation:fairy-glow 2.8s ease-in-out infinite}
+.postbox-invitation .postbox-open::before,.postbox-invitation .postbox-open::after{content:'✦';position:absolute;color:#e4a4d6;font-size:15px;pointer-events:none;animation:visit-twinkle 1.9s ease-in-out infinite}
+.postbox-invitation .postbox-open::before{left:-10px;top:12px}.postbox-invitation .postbox-open::after{right:-9px;bottom:12px;animation-delay:.8s}
+.postbox-invitation .postbox-open:hover,.postbox-invitation .postbox-open:focus-visible{box-shadow:0 0 0 2px #f5d7ef,0 0 25px #e9a9dcbb,0 0 48px #c8a2ed99,6px 9px 0 #e6c6e477;animation:none}
+@keyframes fairy-glow{50%{box-shadow:0 0 0 1px #f4d5f0,0 0 25px #e9a9dcbb,0 0 44px #c8a2ed88,4px 5px 0 #e6c6e455}}
+body.twilight footer>.garden-visits{background:transparent;border:0;box-shadow:none}
+body.twilight .garden-visits .visit-sparkle{color:#ffd1ee}
+@media(max-width:480px){footer>.garden-visits{width:calc(100% - 20px);font-size:10px;padding:7px 9px}.garden-visits .visit-sparkle{font-size:13px}.garden-visits .visit-flower{font-size:13px}}
+</style>
 </head>
 <body>
 <nav aria-label="Main navigation">
@@ -515,9 +542,9 @@ body.twilight .postbox-invitation .postbox-open{background:linear-gradient(120de
 </section>
 </main>
 <footer>
-<span>© 2026 Azaria Syahla Fitan Adibah</span>
-<span>Made with curiosity & a little whimsy ❃</span>
-<div class="garden-visits" id="garden-visits"><span class="visit-flower" aria-hidden="true">🌷</span><span id="visits-before">This little garden has welcomed</span> <output id="garden-visit-count" aria-live="polite">…</output> <span id="visits-after">visits.</span> <span class="visit-info" title="Total page views recorded since this counter was installed. Repeat visits may count. Preview visits are excluded.">ⓘ</span><br><a href="https://hits.sh/" target="_blank" rel="noopener noreferrer">Counter by Hits</a></div></footer>
+<span class="footer-credit">Developed by Azaria Syahla Fitan Adibah</span>
+<span class="footer-made">Made with curiosity & a little whimsy ❃</span>
+<div class="garden-visits" id="garden-visits"><span class="visit-sparkle sparkle-left" aria-hidden="true">✦</span><span class="visit-flower" aria-hidden="true">🌷</span><span id="visits-before">A tiny fairy counted</span> <output id="garden-visit-count" aria-live="polite">…</output> <span id="visits-after">little visits to this garden ✨</span><span class="visit-flower" aria-hidden="true">🌷</span><span class="visit-sparkle sparkle-right" aria-hidden="true">✦</span><span class="visit-info" title="Total page views recorded since this counter was installed. Repeat visits may count. Preview visits are excluded.">ⓘ</span><br><a href="https://hits.sh/" target="_blank" rel="noopener noreferrer">Counter by Hits</a></div></footer>
 <script>document.querySelectorAll('[data-filter]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));document.querySelectorAll('[data-category]').forEach(card=>card.hidden=button.dataset.filter!=='all'&&card.dataset.category!==button.dataset.filter)}));</script>
 <div class="butterfly-pointer" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><g class="butterfly-wing"><path d="M23 24C9 0 0 12 9 26C0 36 17 45 23 27" fill="#d8a8ed" stroke="#8b5caa" stroke-width="1.2"/><path d="M25 24C39 0 48 12 39 26C48 36 31 45 25 27" fill="#f1b1cf" stroke="#a35d90" stroke-width="1.2"/><path d="M20 24L11 17M28 24L37 17M19 30L13 34M29 30L35 34" stroke="#fff5fc" stroke-width="2" stroke-linecap="round"/></g><path d="M24 20V34M23 21L20 15M25 21L28 15" stroke="#665078" stroke-width="2" stroke-linecap="round"/></svg></div>
 <script>
@@ -882,6 +909,8 @@ window.GARDEN_TRANSLATIONS = {
   "Selected projects, contributions and milestones.": "Pilihan proyek, kontribusi, dan pencapaianku.",
   "This little garden has welcomed": "Taman kecil ini sudah menerima",
   "visits.": "kunjungan.",
+  "A tiny fairy counted": "Peri kecil menghitung",
+  "little visits to this garden ✨": "kunjungan kecil ke taman ini ✨",
   "Counter by Hits": "Penghitung oleh Hits"
 };
 
@@ -904,6 +933,7 @@ window.SYAHLA_GARDEN_COUNTER = Object.freeze({service:'https://hits.sh/', key:'a
  });
  Object.assign(dictionary, {"A little something to take home 💌": "Sedikit kenang-kenangan untuk dibawa pulang 💌", "My CV & formal portfolio": "CV & portofolio formalku", "CV and formal portfolio": "CV dan portofolio formal", "Close document collection": "Tutup koleksi dokumen"});
  Object.assign(dictionary, {"Before you flutter away…": "Sebelum kamu terbang pergi…", "Psst… a little letter for you.": "Psst… ada surat kecil untukmu.", "My CV & portfolio are tucked inside. Take a peek?": "CV & portofolioku tersimpan di dalam. Mau mengintip?", "for you ♡": "untukmu ♡"});
+ Object.assign(dictionary, {'Developed by Azaria Syahla Fitan Adibah':'Dikembangkan oleh Azaria Syahla Fitan Adibah'});
  const normalize=s=>s.replace(/\s+/g,' ').trim();
  const pairs=new Map(),reverse=new Map();
  Object.entries(dictionary).forEach(([en,id])=>{pairs.set(normalize(en),id);reverse.set(normalize(id),en)});
@@ -928,7 +958,7 @@ window.SYAHLA_GARDEN_COUNTER = Object.freeze({service:'https://hits.sh/', key:'a
  postbox.addEventListener('close',()=>{document.body.style.overflow=previousOverflow;openPostbox.focus({preventScroll:true})});
  // Total page views, not unique people. Language changes and opening letters do not add visits.
  const count=document.querySelector('#garden-visit-count'),cfg=window.SYAHLA_GARDEN_COUNTER;
- const preview=location.protocol==='file:'||location.hostname!=='azariasyahla.github.io'||new URLSearchParams(location.search).has('preview');
+ const preview=new URLSearchParams(location.search).has('preview');
  function localLabel(en,id){return language==='id'?id:en}
  let counterImage=null,state=preview?'preview':'loading';
  function renderCount(){if(state==='preview'){count.textContent=localLabel('Preview','Pratinjau');count.title=localLabel('Preview visits are excluded.','Kunjungan pratinjau tidak dihitung.')}else if(state==='success'){if(!count.contains(counterImage))count.replaceChildren(counterImage);counterImage.alt=localLabel('Total page visits','Total kunjungan halaman');count.removeAttribute('title')}else if(state==='error'){count.textContent='—';count.title=localLabel('Visit count is temporarily unavailable.','Jumlah kunjungan sedang tidak tersedia.')}}
