@@ -31,3 +31,5 @@ Bahasa:
 Untuk update berikutnya, gunakan index.html versi ini dan pertahankan folder downloads.
 CSS dan JavaScript tambahan sudah menyatu dalam index.html.
 Untuk mengganti PDF, cukup ganti file dalam downloads dengan nama yang sama.
+
+Revisi: amplop CV dan portofolio sekarang ada dalam popup. Tombol surat kecil berada tepat sebelum bagian kontak.
