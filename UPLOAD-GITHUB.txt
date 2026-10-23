@@ -1,0 +1,33 @@
+UPDATE PORTOFOLIO SYAHLA
+
+1. Extract ZIP ini terlebih dahulu.
+2. Buka https://github.com/azariasyahla/portofolio
+3. Pilih Add file > Upload files.
+4. Seret SEMUA file berikut dan folder downloads ke halaman upload:
+   index.html
+   downloads/ (berisi kedua PDF)
+5. Pastikan index.html berada di root repo, bukan di dalam folder tambahan.
+6. Commit changes. Tunggu deployment GitHub Pages selesai.
+
+Tombol View:
+- CV: https://canva.link/6ze11gj9b5qm3jo
+- Portofolio: https://canva.link/02wgj0gor3ss8gd
+Tombol Download mengambil file PDF dari folder downloads.
+
+Pengunjung:
+- Counter memakai layanan Hits.sh, bukan localStorage.
+- Kunci permanen: azariasyahla.github.io/portofolio/total-visits-v1
+- Jangan ubah kunci itu saat memperbarui desain.
+- Kunjungan sebelum counter dipasang tidak tersedia.
+- Menghitung pemuatan halaman, bukan orang unik. Cache, pemblokir, dan kegagalan jaringan bisa memengaruhi hitungan. Layanan eksternal tidak menjamin hitungan seumur hidup.
+- Preview lokal tidak dihitung. Counter aktif pada domain azariasyahla.github.io.
+- Jika pindah ke domain kustom, perbarui pemeriksaan hostname di script garden-features dalam index.html tetapi pertahankan key counter.
+- Jika layanan tidak dapat dimuat, tampil tanda —, bukan angka buatan.
+
+Bahasa:
+- Default EN. Pilihan EN/ID tersimpan di browser pengunjung.
+- Nama proyek, nama tools, judul resmi sertifikat, dan singkatan resmi tetap dipertahankan.
+
+Untuk update berikutnya, gunakan index.html versi ini dan pertahankan folder downloads.
+CSS dan JavaScript tambahan sudah menyatu dalam index.html.
+Untuk mengganti PDF, cukup ganti file dalam downloads dengan nama yang sama.
