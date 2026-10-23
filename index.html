@@ -338,6 +338,14 @@ body.twilight footer>.garden-visits{background:transparent;border:0;box-shadow:n
 body.twilight .garden-visits .visit-sparkle{color:#ffd1ee}
 @media(max-width:480px){footer>.garden-visits{width:calc(100% - 20px);font-size:10px;padding:7px 9px}.garden-visits .visit-sparkle{font-size:13px}.garden-visits .visit-flower{font-size:13px}}
 </style>
+<style id="responsive-train-interaction">
+/* Optional rail interaction: automatic travel remains the default. */
+.fairy-track{cursor:pointer;touch-action:manipulation}
+.fairy-train{pointer-events:auto;cursor:pointer;animation-duration:52s;transition:left 1.8s cubic-bezier(.2,.8,.25,1)}
+.fairy-train.train-routing{animation:none}
+@media(max-width:600px){.fairy-track{height:18px}.fairy-train{transform:scale(.86);transform-origin:left bottom}}
+@media(prefers-reduced-motion:reduce){.fairy-train{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
 <nav aria-label="Main navigation">
@@ -660,7 +668,7 @@ body.twilight .garden-visits .visit-sparkle{color:#ffd1ee}
  function petals(element){if(reduced.matches)return;const r=element.getBoundingClientRect();for(let i=0;i<7;i++){const p=document.createElement('span');p.className='magic-petal';p.setAttribute('aria-hidden','true');p.textContent=['❀','❁','♡'][i%3];p.style.left=(r.left+r.width/2)+'px';p.style.top=(r.top+r.height/2)+'px';p.style.setProperty('--px',((i-3)*22)+'px');p.style.setProperty('--py',(-35-Math.random()*50)+'px');document.body.appendChild(p);setTimeout(()=>p.remove(),850)}}
  document.querySelectorAll('[data-house]').forEach(h=>h.addEventListener('click',()=>{petals(h)}));
  document.querySelectorAll('.tool-bag').forEach(b=>b.addEventListener('toggle',()=>{if(b.open){b.classList.remove('bag-bounce');void b.offsetWidth;b.classList.add('bag-bounce');petals(b.querySelector('summary'));setTimeout(()=>b.classList.remove('bag-bounce'),550)}}));
- document.addEventListener('fairy-train-sound',()=>{if(!enabled)return;try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();audio.resume();const now=audio.currentTime;for(let i=0;i<8;i++){const o=audio.createOscillator(),g=audio.createGain();o.type='triangle';o.frequency.setValueAtTime(i%2?220:165,now+i*.13);o.frequency.exponentialRampToValueAtTime(80,now+i*.13+.09);g.gain.setValueAtTime(.0001,now+i*.13);g.gain.exponentialRampToValueAtTime(.045,now+i*.13+.01);g.gain.exponentialRampToValueAtTime(.0001,now+i*.13+.11);o.connect(g);g.connect(audio.destination);o.start(now+i*.13);o.stop(now+i*.13+.12)}}catch(e){}});
+ document.addEventListener('fairy-train-sound',()=>{if(!enabled)return;try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();audio.resume();const now=audio.currentTime;for(let i=0;i<8;i++){const o=audio.createOscillator(),g=audio.createGain();o.type='triangle';o.frequency.setValueAtTime(i%2?220:165,now+i*.13);o.frequency.exponentialRampToValueAtTime(80,now+i*.13+.09);g.gain.setValueAtTime(.0001,now+i*.13);g.gain.exponentialRampToValueAtTime(.055,now+i*.13+.01);g.gain.exponentialRampToValueAtTime(.0001,now+i*.13+.11);o.connect(g);g.connect(audio.destination);o.start(now+i*.13);o.stop(now+i*.13+.12)}}catch(e){}});
  document.addEventListener('click',e=>{
  const control=e.target.closest('a[href],button,summary');
  if(!control||control===soundButton||control.classList.contains('fairy-train')||control.disabled)return;
@@ -974,6 +982,22 @@ window.SYAHLA_GARDEN_COUNTER = Object.freeze({service:'https://hits.sh/', key:'a
  counterImage.src=cfg.service+cfg.key+'.svg?label=%E2%99%A1&color=b787c7&labelColor=76518d&style=flat';
 })();
 
+</script>
+<script id="rail-touch-routing">
+(()=>{
+  const train=document.querySelector('.fairy-train'), track=document.querySelector('.fairy-track'), land=document.querySelector('.village-landscape');
+  if(!train||!track||!land)return;
+  let routeTimer;
+  function routeTrain(clientX){
+    const r=land.getBoundingClientRect(), max=Math.max(0,land.clientWidth-train.offsetWidth);
+    const target=Math.max(0,Math.min(max,clientX-r.left-train.offsetWidth/2));
+    clearTimeout(routeTimer); train.classList.add('train-routing'); train.style.left=target+'px';
+    document.dispatchEvent(new Event('fairy-train-sound'));
+    routeTimer=setTimeout(()=>{train.classList.remove('train-routing');train.style.left=''},2300);
+  }
+  track.addEventListener('pointerdown',e=>{routeTrain(e.clientX)});
+  track.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();routeTrain(track.getBoundingClientRect().left+track.getBoundingClientRect().width*.65)}});
+})();
 </script>
 </body>
 </html>
