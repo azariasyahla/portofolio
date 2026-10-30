@@ -116,6 +116,15 @@
 .progress-track{display:none}
 
 .bottom-card{pointer-events:none}
+
+.control-card #look-left,.control-card #look-right{width:auto;min-width:72px;padding:0 8px;font-size:10px;white-space:nowrap}
+.control-card #look-center{width:auto;min-width:62px;padding:0 8px;font-size:10px;white-space:nowrap}
+@media(max-width:650px){
+ .control-card #look-left,.control-card #look-right,.control-card #look-center{position:relative;width:34px;min-width:34px;padding:0;font-size:0}
+ .control-card #look-left:before{content:"←";font-size:18px}
+ .control-card #look-center:before{content:"◎";font-size:18px}
+ .control-card #look-right:before{content:"→";font-size:18px}
+}
 </style>
 </head>
 <body>
@@ -145,7 +154,7 @@
 <div class="rope-barrier" style="--z:-3050px" aria-hidden="true"><i></i><i></i><b></b></div><button class="exhibit left" style="--z:-3050px" data-room="catalog" aria-label="Open Project 5: Spare Part Desk"><span class="exhibit-inner"><span class="room-no">PROJECT 5</span><span class="mini-art"><span class="mini-search">DUMMY PART SEARCH</span></span><strong class="room-title">Spare Part<br>Desk</strong><span class="room-kind">CATALOG SEARCH</span><span class="mini-stamp">OPEN</span></span></button>
 </div>
 <div class="overlay">
-<div class="topbar"><div class="brand-card"><strong>Traknus Project Gallery</strong><span>Azaria Syahla Fitan Adibah<br>6-Month Project Showcase<br>Traktor Nusantara</span></div><div class="control-card" aria-label="Look around controls"><span class="control-label">LOOK</span><button type="button" id="look-left" aria-label="Look left">↶</button><button type="button" id="look-center" aria-label="Look forward">◎</button><button type="button" id="look-right" aria-label="Look right">↷</button><button type="button" class="sound-button" id="sound-toggle" aria-pressed="false" aria-label="Turn ambient music on" title="Music off"></button></div></div>
+<div class="topbar"><div class="brand-card"><strong>Traknus Project Gallery</strong><span>Azaria Syahla Fitan Adibah<br>6-Month Project Showcase<br>Traktor Nusantara</span></div><div class="control-card" aria-label="Look around controls"><span class="control-label">LOOK</span><button type="button" id="look-left" aria-label="Turn left" title="Turn left">← LEFT</button><button type="button" id="look-center" aria-label="Reset view" title="Reset view">CENTER</button><button type="button" id="look-right" aria-label="Turn right" title="Turn right">RIGHT →</button><button type="button" class="sound-button" id="sound-toggle" aria-pressed="false" aria-label="Turn ambient music on" title="Music off"></button></div></div>
 <div class="hint-chip" id="room-hint">Drag / pinch to explore · Scroll to zoom · Tap a project or lamp</div>
 <div class="bottom-card"><span class="instructions">Drag to look · Pinch / scroll to zoom · ← → turn · W S walk</span><span class="progress"><span id="room-count">ENTRANCE</span><span class="progress-track"><i class="progress-fill" id="progress-fill"></i></span></span></div>
 
@@ -178,7 +187,7 @@ function initMuseumMusic(){audioCtx=new(window.AudioContext||window.webkitAudioC
 function playMuseumNote(freq){const now=audioCtx.currentTime,osc=audioCtx.createOscillator(),tone=audioCtx.createBiquadFilter(),env=audioCtx.createGain();osc.type='sine';osc.frequency.setValueAtTime(freq,now);tone.type='lowpass';tone.frequency.value=1900;env.gain.setValueAtTime(.0001,now);env.gain.exponentialRampToValueAtTime(.14,now+.12);env.gain.exponentialRampToValueAtTime(.0001,now+3.1);osc.connect(tone);tone.connect(env);env.connect(musicMaster);osc.start(now);osc.stop(now+3.2)}
 function playMuseumPhrase(){const phraseIndex=Math.floor(musicStep/6)%museumPhrases.length,noteIndex=musicStep%6;playMuseumNote(museumPhrases[phraseIndex][noteIndex]);if(noteIndex===0)playMuseumNote(museumPhrases[phraseIndex][2]/2);musicStep++}
 soundButton.addEventListener('click',async()=>{if(!audioCtx)initMuseumMusic();if(audioCtx.state==='suspended')await audioCtx.resume();musicOn=!musicOn;soundButton.setAttribute('aria-pressed',String(musicOn));soundButton.setAttribute('aria-label',musicOn?'Turn ambient music off':'Turn ambient music on');soundButton.title=musicOn?'Music on':'Music off';musicMaster.gain.setTargetAtTime(musicOn ? .34 : 0,audioCtx.currentTime,.8);if(musicOn&&!musicTimer){playMuseumPhrase();musicTimer=setInterval(playMuseumPhrase,930)}else if(!musicOn&&musicTimer){clearInterval(musicTimer);musicTimer=null}});
-function bindLookButton(id,direction){const button=document.getElementById(id);let held=false,holdDelay=null,spinTimer=null;const stop=()=>{if(!held)return;held=false;clearTimeout(holdDelay);if(spinTimer){clearInterval(spinTimer);spinTimer=null}else turn(direction*45)};button.addEventListener('pointerdown',e=>{held=true;if(button.setPointerCapture)button.setPointerCapture(e.pointerId);holdDelay=setTimeout(()=>{spinTimer=setInterval(()=>turn(direction*2),24)},170);e.preventDefault()});button.addEventListener('pointerup',stop);button.addEventListener('pointercancel',stop);button.addEventListener('lostpointercapture',stop);button.addEventListener('click',e=>{if(e.detail===0)turn(direction*45)})}bindLookButton('look-left',-1);bindLookButton('look-right',1);document.getElementById('look-center').addEventListener('click',()=>{targetYaw=0;easeCamera()});
+document.getElementById('look-left').addEventListener('click',()=>turn(-45));document.getElementById('look-right').addEventListener('click',()=>turn(45));document.getElementById('look-center').addEventListener('click',()=>{targetYaw=0;yaw=0;render()});
 document.getElementById('enter-hall').addEventListener('click',()=>{start.classList.add('hidden');museum.focus?.()});
 document.getElementById('close-detail').addEventListener('click',()=>{details.style.display='none'});
 details.addEventListener('click',e=>{if(e.target===details)details.style.display='none'});
