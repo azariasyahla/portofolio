@@ -125,6 +125,14 @@
  .control-card #look-center:before{content:"◎";font-size:18px}
  .control-card #look-right:before{content:"→";font-size:18px}
 }
+
+@media(max-width:1000px){
+ .control-label{display:none}
+ .control-card{gap:3px;padding:5px}
+ .control-card #look-left,.control-card #look-right{min-width:54px;padding:0 4px;font-size:9px}
+ .control-card #look-center{min-width:48px;padding:0 4px;font-size:9px}
+ .control-card .sound-button{width:34px;min-width:34px}
+}
 </style>
 </head>
 <body>
@@ -187,7 +195,7 @@ function initMuseumMusic(){audioCtx=new(window.AudioContext||window.webkitAudioC
 function playMuseumNote(freq){const now=audioCtx.currentTime,osc=audioCtx.createOscillator(),tone=audioCtx.createBiquadFilter(),env=audioCtx.createGain();osc.type='sine';osc.frequency.setValueAtTime(freq,now);tone.type='lowpass';tone.frequency.value=1900;env.gain.setValueAtTime(.0001,now);env.gain.exponentialRampToValueAtTime(.14,now+.12);env.gain.exponentialRampToValueAtTime(.0001,now+3.1);osc.connect(tone);tone.connect(env);env.connect(musicMaster);osc.start(now);osc.stop(now+3.2)}
 function playMuseumPhrase(){const phraseIndex=Math.floor(musicStep/6)%museumPhrases.length,noteIndex=musicStep%6;playMuseumNote(museumPhrases[phraseIndex][noteIndex]);if(noteIndex===0)playMuseumNote(museumPhrases[phraseIndex][2]/2);musicStep++}
 soundButton.addEventListener('click',async()=>{if(!audioCtx)initMuseumMusic();if(audioCtx.state==='suspended')await audioCtx.resume();musicOn=!musicOn;soundButton.setAttribute('aria-pressed',String(musicOn));soundButton.setAttribute('aria-label',musicOn?'Turn ambient music off':'Turn ambient music on');soundButton.title=musicOn?'Music on':'Music off';musicMaster.gain.setTargetAtTime(musicOn ? .34 : 0,audioCtx.currentTime,.8);if(musicOn&&!musicTimer){playMuseumPhrase();musicTimer=setInterval(playMuseumPhrase,930)}else if(!musicOn&&musicTimer){clearInterval(musicTimer);musicTimer=null}});
-document.getElementById('look-left').addEventListener('click',()=>{targetYaw=90;easeCamera()});document.getElementById('look-right').addEventListener('click',()=>{targetYaw=-90;easeCamera()});document.getElementById('look-center').addEventListener('click',()=>{targetYaw=0;yaw=0;render()});
+function faceNearestProject(side){const depths=side==='left'?[650,1850,3050]:[1250,2450];const depth=depths.reduce((best,value)=>Math.abs(value-walk)<Math.abs(best-walk)?value:best,depths[0]);const wallX=side==='left'?-403:403;targetYaw=Math.atan2(-wallX,depth-walk)*180/Math.PI;easeCamera()}document.getElementById('look-left').addEventListener('click',()=>faceNearestProject('left'));document.getElementById('look-right').addEventListener('click',()=>faceNearestProject('right'));document.getElementById('look-center').addEventListener('click',()=>{targetYaw=0;yaw=0;render()});
 document.getElementById('enter-hall').addEventListener('click',()=>{start.classList.add('hidden');museum.focus?.()});
 document.getElementById('close-detail').addEventListener('click',()=>{details.style.display='none'});
 details.addEventListener('click',e=>{if(e.target===details)details.style.display='none'});
