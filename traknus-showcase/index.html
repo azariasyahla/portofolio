@@ -163,11 +163,11 @@
 </div>
 <div class="overlay">
 <div class="topbar"><div class="brand-card"><strong>Traknus Project Gallery</strong><span>Azaria Syahla Fitan Adibah<br>6-Month Project Showcase<br>Traktor Nusantara</span></div><div class="control-card" aria-label="Look around controls"><span class="control-label">LOOK</span><button type="button" id="look-left" aria-label="Turn left" title="Turn left">← LEFT</button><button type="button" id="look-center" aria-label="Reset view" title="Reset view">CENTER</button><button type="button" id="look-right" aria-label="Turn right" title="Turn right">RIGHT →</button><button type="button" class="sound-button" id="sound-toggle" aria-pressed="false" aria-label="Turn ambient music on" title="Music off"></button></div></div>
-<div class="hint-chip" id="room-hint">Drag ← → to look · Drag ↑ ↓ to walk</div>
-<div class="bottom-card"><span class="instructions">Drag ← → to look · Drag ↑ ↓ to walk · W / S</span><span class="progress"><span id="room-count">ENTRANCE</span><span class="progress-track"><i class="progress-fill" id="progress-fill"></i></span></span></div>
+<div class="hint-chip" id="room-hint">Drag ← → look · Drag ↑ ↓ walk</div>
+<div class="bottom-card"><span class="instructions">W / S walk · A / D turn · Drag to look & walk</span><span class="progress"><span id="room-count">ENTRANCE</span><span class="progress-track"><i class="progress-fill" id="progress-fill"></i></span></span></div>
 
 </div>
-<div id="start-card"><section class="welcome" aria-labelledby="welcome-title"><div class="ticket" aria-hidden="true">🎟️</div><h1 id="welcome-title">Step into my little museum.</h1><p>A walk-through gallery of data, automation, and useful tools built around Material Handling work at Traktor Nusantara.</p><button id="enter-hall" type="button">Enter the corridor ↗</button><small>Drag left or right to look around · Use W/S to walk</small></section></div>
+<div id="start-card"><section class="welcome" aria-labelledby="welcome-title"><div class="ticket" aria-hidden="true">🎟️</div><h1 id="welcome-title">Step into my little museum.</h1><p>A walk-through gallery of data, automation, and useful tools built around Material Handling work at Traktor Nusantara.</p><button id="enter-hall" type="button">Enter the corridor ↗</button><small>W/S walk · A/D turn · Drag to look around</small></section></div>
 <div id="details" role="dialog" aria-modal="true" aria-labelledby="detail-title"><section class="detail-card"><div class="detail-top"><div><div class="detail-kicker" id="detail-kicker"></div><h2 id="detail-title"></h2></div><button class="detail-close" id="close-detail" type="button" aria-label="Close project details">Close ×</button></div><p id="detail-intro"></p><h3>What I worked on</h3><ul id="detail-work"></ul><div class="detail-note" id="detail-note"></div><div class="detail-links" id="detail-links"></div></section></div>
 </main>
 <script>
@@ -206,7 +206,7 @@ document.addEventListener('pointermove',e=>{if(activePointers.has(e.pointerId))a
 const endDrag=e=>{activePointers.delete(e.pointerId);if(gestureMoved){suppressClick=true;setTimeout(()=>suppressClick=false,300)}dragging=false;if(activePointers.size===1){const p=[...activePointers.values()][0];lastX=p.x;lastY=p.y;dragging=true}};document.addEventListener('pointerup',endDrag);document.addEventListener('pointercancel',endDrag);document.addEventListener('lostpointercapture',endDrag);
 museum.addEventListener('click',e=>{if(suppressClick){e.preventDefault();e.stopPropagation();suppressClick=false}},true);
 museum.addEventListener('wheel',e=>{if(e.target.closest('#details,#start-card'))return;targetZoom=Math.max(minZoom,Math.min(maxZoom,targetZoom*Math.exp(-e.deltaY*.0008)));easeCamera();e.preventDefault()},{passive:false});
-document.addEventListener('keydown',e=>{if(details.style.display==='grid'){if(e.key==='Escape'){details.style.display='none';document.querySelector('[data-room]')?.focus()}return}if(e.key==='ArrowLeft'){e.preventDefault();turn(-18)}if(e.key==='ArrowRight'){e.preventDefault();turn(18)}if(e.key==='ArrowUp'||e.key.toLowerCase()==='w'){e.preventDefault();move(120)}if(e.key==='ArrowDown'||e.key.toLowerCase()==='s'){e.preventDefault();move(-120)}});
+document.addEventListener('keydown',e=>{if(details.style.display==='grid'){if(e.key==='Escape'){details.style.display='none';document.querySelector('[data-room]')?.focus()}return}if(e.key==='ArrowLeft'||e.key.toLowerCase()==='a'){e.preventDefault();turn(18)}if(e.key==='ArrowRight'||e.key.toLowerCase()==='d'){e.preventDefault();turn(-18)}if(e.key==='ArrowUp'||e.key.toLowerCase()==='w'){e.preventDefault();move(120)}if(e.key==='ArrowDown'||e.key.toLowerCase()==='s'){e.preventDefault();move(-120)}});
 render();
 })();
 </script>
