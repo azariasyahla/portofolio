@@ -223,6 +223,10 @@
 .chandelier-bulbs{position:absolute;inset:130px 0 auto;height:28px;background:radial-gradient(ellipse at 8% 50%,#fff8cf 0 5px,transparent 7px),radial-gradient(ellipse at 27% 50%,#fff8cf 0 5px,transparent 7px),radial-gradient(ellipse at 50% 50%,#fff8cf 0 5px,transparent 7px),radial-gradient(ellipse at 73% 50%,#fff8cf 0 5px,transparent 7px),radial-gradient(ellipse at 92% 50%,#fff8cf 0 5px,transparent 7px);filter:drop-shadow(0 0 8px #ffe6a5)}
 .chandelier-glow{position:absolute;left:50%;top:100px;width:450px;height:160px;margin-left:-225px;border-radius:50%;background:radial-gradient(ellipse,#ffe6a42a,transparent 72%);filter:blur(9px);z-index:-1}
 @media(max-width:700px){.chandelier{transform:translate3d(0,-238px,var(--z)) scale(.62)}}
+
+/* During a side-facing view, move the opposite corridor wall out of the sightline. */
+.wall{transition:opacity .22s ease}
+.look-left-view .wall.right,.look-right-view .wall.left{opacity:0;pointer-events:none}
 </style>
 </head>
 <body>
@@ -270,7 +274,7 @@ const projects={
  catalog:{n:'Project 5 · Catalog search prototype',title:'Spare Part Desk',intro:'A catalog search and price-reference prototype designed to make part information easier to find, review, and complete.',work:['Explored bilingual search terms, typo tolerance, and duplicate checks.','Designed separate commodity and special-price reference views.','Added manual data entry and import-oriented catalog workflows.'],note:'Demo records are fictional; the prototype is not connected to a live master catalog. Search behavior and spreadsheet-style editing are still being refined.',links:[['GitHub demo','https://github.com/azariasyahla/spare-part-catalog-search-demo'],['Kaggle notebook','https://www.kaggle.com/code/azariasyahla/bilingual-spare-parts-catalog-search-demo']]}
 };
 let yaw=0,walk=0,targetYaw=0,targetWalk=0,zoom=1,targetZoom=1,cameraFrame=null,lastCameraTime=0,dragging=false,lastX=0,lastY=0,gestureMoved=false,suppressClick=false;const minWalk=0,maxWalk=4250,minZoom=.45,maxZoom=2.15;
-function render(){world.style.transform='rotateY('+(-yaw)+'deg) translateZ('+walk+'px) scale('+zoom+')';document.getElementById('progress-fill').style.width=Math.min(100,walk/maxWalk*100)+'%';let idx=Math.min(5,Math.max(0,Math.round(walk/700)));document.getElementById('room-count').textContent=idx===0?'ENTRANCE':'PROJECT '+Math.min(idx,5)+' / 5';}
+function render(){world.style.transform='rotateY('+(-yaw)+'deg) translateZ('+walk+'px) scale('+zoom+')';const angle=((yaw%360)+360)%360;museum.classList.toggle('look-left-view',angle>=42&&angle<=138);museum.classList.toggle('look-right-view',angle>=222&&angle<=318);document.getElementById('progress-fill').style.width=Math.min(100,walk/maxWalk*100)+'%';let idx=Math.min(5,Math.max(0,Math.round(walk/700)));document.getElementById('room-count').textContent=idx===0?'ENTRANCE':'PROJECT '+Math.min(idx,5)+' / 5';}
 function animateCamera(now){cameraFrame=null;const elapsed=lastCameraTime?Math.min(64,now-lastCameraTime):16;lastCameraTime=now;const blend=1-Math.exp(-elapsed/18);yaw+=(targetYaw-yaw)*blend;walk+=(targetWalk-walk)*blend;zoom+=(targetZoom-zoom)*blend;if(Math.abs(targetYaw-yaw)<.035)yaw=targetYaw;if(Math.abs(targetWalk-walk)<.35)walk=targetWalk;if(Math.abs(targetZoom-zoom)<.001)zoom=targetZoom;render();if(yaw!==targetYaw||walk!==targetWalk||zoom!==targetZoom)cameraFrame=requestAnimationFrame(animateCamera);else lastCameraTime=0}
 function easeCamera(){if(cameraFrame===null){lastCameraTime=0;cameraFrame=requestAnimationFrame(animateCamera)}}
 function turn(delta){targetYaw+=delta;easeCamera()}
