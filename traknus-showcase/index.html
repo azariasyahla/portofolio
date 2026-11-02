@@ -19,13 +19,13 @@
 .ceiling{width:860px;height:4400px;margin-left:-430px;margin-top:-2200px;background-color:#aa4429;background-image:linear-gradient(0deg,transparent 0 39px,#632b2088 40px 42px),repeating-linear-gradient(90deg,transparent 0 77px,#632b2088 78px 80px);background-size:100% 42px,80px 84px;box-shadow:inset 0 -35px 70px #4d211c88;transform:translate3d(0,-250px,-2200px) rotateX(-90deg)}
 .end-wall{width:860px;height:500px;margin-left:-430px;margin-top:-250px;background-color:#bd4d2e;background-image:linear-gradient(0deg,transparent 0 39px,#632b2088 40px 42px),repeating-linear-gradient(90deg,transparent 0 77px,#632b2088 78px 80px);background-size:100% 42px,80px 84px;transform:translate3d(0,0,-4400px)}
 .end-wall{width:1500px;margin-left:-750px}
-/* Widen the final gallery bay so visitors can face the side-wall artwork more directly. */
-.floor,.ceiling{width:1500px;margin-left:-750px}
-.end-wall{width:1500px;margin-left:-750px}
-.wall.left{transform:translate3d(-750px,0,-2200px) rotateY(90deg)}
-.wall.right{transform:translate3d(750px,0,-2200px) rotateY(-90deg)}
-.display-case.end-view{transform:translate3d(-330px,-4px,-4350px)}
-.exhibit.end-view{transform:translate3d(330px,-12px,-4348px)}
+/* Extra-wide viewing bay: side walls stay outside the turning view. */
+.floor,.ceiling{width:2200px;margin-left:-1100px}
+.end-wall{width:2200px;margin-left:-1100px}
+.wall.left{transform:translate3d(-1100px,0,-2200px) rotateY(90deg)}
+.wall.right{transform:translate3d(1100px,0,-2200px) rotateY(-90deg)}
+.display-case.end-view{transform:translate3d(-470px,-4px,-4350px)}
+.exhibit.end-view{transform:translate3d(470px,-12px,-4348px)}
 .end-door{position:absolute;width:230px;height:340px;left:50%;top:50%;margin:-170px 0 0 -115px;border:12px solid #55312c;border-bottom:0;border-radius:110px 110px 0 0;background:linear-gradient(90deg,#422723,#ffe2a9 50%,#462923);box-shadow:inset 0 0 0 8px #c08a56,0 0 50px #ffdf98}
 .end-sign{position:absolute;left:50%;top:18%;transform:translateX(-50%);font:700 17px Aptos,"Aptos Display",sans-serif;letter-spacing:2px;color:#fff1d3;text-shadow:0 2px 3px #422}
 .lamp{position:absolute;left:50%;top:50%;width:38px;height:104px;margin:-60px 0 0 -19px;transform-style:preserve-3d}
