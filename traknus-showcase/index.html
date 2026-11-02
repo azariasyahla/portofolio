@@ -224,14 +224,17 @@
 .chandelier-glow{position:absolute;left:50%;top:100px;width:450px;height:160px;margin-left:-225px;border-radius:50%;background:radial-gradient(ellipse,#ffe6a42a,transparent 72%);filter:blur(9px);z-index:-1}
 @media(max-width:700px){.chandelier{transform:translate3d(0,-238px,var(--z)) scale(.62)}}
 
-/* During a side-facing view, move the opposite corridor wall out of the sightline. */
-.wall{transition:opacity .22s ease}
-.look-left-view .wall,.look-right-view .wall{opacity:0;pointer-events:none}
+/* Let the brick side walls recede when looking along the gallery. */
+.wall{transition:opacity .28s ease}
+.look-left-view .wall.left,.look-left-view .wall.right,
+.look-right-view .wall.left,.look-right-view .wall.right{opacity:.12;pointer-events:none}
 
-.walk-pad{position:absolute;right:18px;bottom:92px;z-index:30;display:grid;grid-template-columns:repeat(2,42px);grid-template-rows:repeat(2,42px);gap:5px;padding:7px;border:1px solid #d9b98c;border-radius:16px;background:#fff6e7eF;box-shadow:0 4px 16px #45251d33;pointer-events:auto}
-.walk-pad button{width:42px;height:42px;border:1px solid #d6b582;border-radius:12px;background:#fffaf2;color:#563e59;font-size:20px;line-height:1;font-weight:700;touch-action:manipulation}
+.walk-pad{display:none;position:absolute;right:14px;bottom:82px;z-index:31;grid-template-columns:repeat(2,48px);grid-template-rows:repeat(2,48px);gap:6px;padding:8px;border:1px solid #d9b98c;border-radius:17px;background:#fff6e7ed;box-shadow:0 4px 16px #45251d33;pointer-events:auto}
+.walk-pad button{width:48px;height:48px;border:1px solid #d6b582;border-radius:13px;background:#fffaf2;color:#563e59;font-size:22px;line-height:1;font-weight:700;touch-action:manipulation}
 .walk-pad button:active{transform:scale(.95);background:#f0dfc4}
-@media(max-width:650px){.walk-pad{right:12px;bottom:90px;grid-template-columns:repeat(2,38px);grid-template-rows:repeat(2,38px)}.walk-pad button{width:38px;height:38px}}
+@media(max-width:700px){.walk-pad{display:grid;right:12px;bottom:90px}}
+@media(max-width:380px){.walk-pad{grid-template-columns:repeat(2,42px);grid-template-rows:repeat(2,42px);padding:6px}.walk-pad button{width:42px;height:42px}}
+
 
 .music-card{pointer-events:auto;display:flex;align-items:center;padding:7px;background:#fff8ebed;border:1px solid #e5cfa9;border-radius:12px;box-shadow:0 8px 24px #22130f55}
 .music-card .sound-button{width:40px;height:38px;border:1px solid #d2b98f;border-radius:8px;background:#fffdf6;color:#4c354f}
@@ -282,6 +285,7 @@
 <div class="overlay">
 <div class="topbar"><div class="brand-card"><strong>Traknus Project Gallery</strong><span>Azaria Syahla Fitan Adibah<br>6-Month Project Showcase<br>Traktor Nusantara</span></div><div class="music-card" aria-label="Ambient music"><button type="button" class="sound-button" id="sound-toggle" aria-pressed="false" aria-label="Turn ambient music on" title="Music off"></button></div></div>
 <div class="bottom-card"><span class="instructions">W / S walk · A / D turn · Drag to look & walk</span><span class="progress"><span id="room-count">ENTRANCE</span><span class="progress-track"><i class="progress-fill" id="progress-fill"></i></span></span></div>
+<div class="walk-pad" aria-label="Movement controls"><button type="button" data-walk="turn-left" aria-label="Turn left">←</button><button type="button" data-walk="forward" aria-label="Walk forward">↑</button><button type="button" data-walk="back" aria-label="Walk backward">↓</button><button type="button" data-walk="turn-right" aria-label="Turn right">→</button></div>
 
 </div>
 <div id="start-card"><section class="welcome" aria-labelledby="welcome-title"><div class="ticket" aria-hidden="true">🎟️</div><h1 id="welcome-title">Step into my little museum.</h1><p>A walk-through gallery of data, automation, and useful tools built around Material Handling work at Traktor Nusantara.</p><button id="enter-hall" type="button">Enter the corridor ↗</button><small>W/S walk · A/D turn · Drag to look around</small></section></div>
@@ -320,12 +324,13 @@ document.getElementById('close-detail').addEventListener('click',()=>{details.st
 details.addEventListener('click',e=>{if(e.target===details)details.style.display='none'});
 const activePointers=new Map();let pinchStartDistance=0,pinchStartZoom=1;
 function pointerDistance(){const points=[...activePointers.values()];return points.length<2?0:Math.hypot(points[0].x-points[1].x,points[0].y-points[1].y)}
-museum.addEventListener('pointerdown',e=>{if(e.target.closest('.overlay,.welcome,.detail-card,#start-card'))return;clearProjectFocus();activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(e.target.setPointerCapture)e.target.setPointerCapture(e.pointerId);if(activePointers.size===2){dragging=false;gestureMoved=true;pinchStartDistance=pointerDistance();pinchStartZoom=targetZoom;e.preventDefault();return}dragging=true;gestureMoved=false;lastX=e.clientX;lastY=e.clientY;e.preventDefault()},{passive:false});
+museum.addEventListener('pointerdown',e=>{if(e.target.closest('.overlay,.welcome,.detail-card,#start-card,.walk-pad'))return;clearProjectFocus();activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(e.target.setPointerCapture)e.target.setPointerCapture(e.pointerId);if(activePointers.size===2){dragging=false;gestureMoved=true;pinchStartDistance=pointerDistance();pinchStartZoom=targetZoom;e.preventDefault();return}dragging=true;gestureMoved=false;lastX=e.clientX;lastY=e.clientY;e.preventDefault()},{passive:false});
 document.addEventListener('pointermove',e=>{if(activePointers.has(e.pointerId))activePointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(activePointers.size===2){const distance=pointerDistance();if(pinchStartDistance>0){targetZoom=Math.max(minZoom,Math.min(maxZoom,pinchStartZoom*distance/pinchStartDistance));easeCamera()}e.preventDefault();return}if(!dragging)return;const dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;if(Math.abs(dx)>4||Math.abs(dy)>4)gestureMoved=true;if(dx){targetYaw-=dx*(e.pointerType==='mouse' ? .55 : .45);easeCamera()}if(dy){targetWalk=Math.max(minWalk,Math.min(maxWalk,targetWalk-dy*(e.pointerType==='touch' ? 7 : 1.5)));walk=targetWalk}render();e.preventDefault()},{passive:false});
 const endDrag=e=>{activePointers.delete(e.pointerId);if(gestureMoved){suppressClick=true;setTimeout(()=>suppressClick=false,300)}dragging=false;if(activePointers.size===1){const p=[...activePointers.values()][0];lastX=p.x;lastY=p.y;dragging=true}};document.addEventListener('pointerup',endDrag);document.addEventListener('pointercancel',endDrag);document.addEventListener('lostpointercapture',endDrag);
 museum.addEventListener('click',e=>{if(suppressClick){e.preventDefault();e.stopPropagation();suppressClick=false}},true);
-document.addEventListener('wheel',e=>{if(details.style.display==='grid'||start.style.display!=='none')return;const dy=Math.max(-240,Math.min(240,e.deltaY));targetZoom=Math.max(minZoom,Math.min(maxZoom,targetZoom*Math.exp(-dy*.0012)));easeCamera();e.preventDefault()},{passive:false,capture:true});
+document.addEventListener('wheel',e=>{if(details.style.display==='grid'||start.style.display!=='none')return;const unit=e.deltaMode===1?16:e.deltaMode===2?window.innerHeight:1,dy=Math.max(-600,Math.min(600,e.deltaY*unit));if(!dy)return;targetZoom=Math.max(minZoom,Math.min(maxZoom,targetZoom*Math.exp(-dy*.002)));easeCamera();e.preventDefault()},{passive:false,capture:true});
 document.addEventListener('keydown',e=>{if(details.style.display==='grid'){if(e.key==='Escape'){details.style.display='none';document.querySelector('[data-room]')?.focus()}return}if(e.key==='ArrowLeft'||e.key.toLowerCase()==='a'){e.preventDefault();clearProjectFocus();turn(18)}if(e.key==='ArrowRight'||e.key.toLowerCase()==='d'){e.preventDefault();clearProjectFocus();turn(-18)}if(e.key==='ArrowUp'||e.key.toLowerCase()==='w'){e.preventDefault();clearProjectFocus();move(120)}if(e.key==='ArrowDown'||e.key.toLowerCase()==='s'){e.preventDefault();clearProjectFocus();move(-120)}});
+document.querySelectorAll('.walk-pad [data-walk]').forEach(button=>button.addEventListener('click',()=>{clearProjectFocus();const action=button.dataset.walk;if(action==='turn-left')turn(12);else if(action==='turn-right')turn(-12);else if(action==='forward')move(110);else move(-110)}));
 render();
 })();
 </script>
